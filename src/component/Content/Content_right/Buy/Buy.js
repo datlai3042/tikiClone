@@ -1,13 +1,5 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-} from 'react'
-import {
-  Link,
-  useParams,
-} from 'react-router-dom'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
+import { Link, useParams } from 'react-router-dom'
 
 //icon - style
 import style from './buy.module.css'
@@ -22,10 +14,7 @@ import { useQuery } from '@tanstack/react-query'
 import { getProduct } from '../../../../apis/getProduct'
 
 //redux-action
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { addProduct } from '../../../../Redux/reducer'
 import { doOpenBoxLogin } from '../../../../Redux/authSlice'
 
@@ -38,33 +27,24 @@ import MoTaSanPham from './MoTaSanPham'
 
 //toast
 import 'react-toastify/dist/ReactToastify.css'
-import {
-  ToastContainer,
-  toast,
-} from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
 
 export default function Buy() {
   const { id } = useParams()
-  const [quantity, setQuantity] =
-    useState(1)
+  const [quantity, setQuantity] = useState(1)
   const [ship, setShip] = useState('')
   const dispatch = useDispatch()
-  const [btnTop, setBtnTop] =
-    useState(0)
+  const [btnTop, setBtnTop] = useState(0)
   const [_, setBtnBottom] = useState(0)
   const [hide, setHide] = useState(true)
-  const [sanPham, setSanPham] =
-    useState()
-  const user = useSelector(
-    (state) => state.auth?.userCurrent,
-  )
+  const [sanPham, setSanPham] = useState()
+  const user = useSelector((state) => state.auth?.userCurrent)
 
   // Lấy dữ liệu dựa trên param của url
-  const { data, isLoading, isSuccess } =
-    useQuery({
-      queryKey: ['product', id],
-      queryFn: () => getProduct(id),
-    })
+  const { data, isLoading, isSuccess } = useQuery({
+    queryKey: ['product', id],
+    queryFn: () => getProduct(id),
+  })
 
   console.log('re-render')
 
@@ -86,12 +66,8 @@ export default function Buy() {
   }
 
   // Xử lí chọn phương thức giao hàng
-  const handleMethodShip = (
-    nameShip,
-  ) => {
-    console.log(
-      `Chọn phương thức giao hàng là: ${nameShip}`,
-    )
+  const handleMethodShip = (nameShip) => {
+    console.log(`Chọn phương thức giao hàng là: ${nameShip}`)
     setShip(nameShip)
   }
 
@@ -111,17 +87,12 @@ export default function Buy() {
     } else {
       //các tính toán về giá sản phẩm khi có mã giảm giá
       let maGiamGia =
-        sanPham?.isPromote[0]
-          .checkPromote === true
-          ? sanPham?.isPromote[1]
-              .promote * -1
+        sanPham?.isPromote[0].checkPromote === true
+          ? sanPham?.isPromote[1].promote * -1
           : 0
       let giamGia =
-        sanPham?.isPromote[0]
-          .checkPromote === true
-          ? sanPham?.isPrice -
-            (sanPham?.isPrice / 100) *
-              maGiamGia
+        sanPham?.isPromote[0].checkPromote === true
+          ? sanPham?.isPrice - (sanPham?.isPrice / 100) * maGiamGia
           : 0
 
       //interface sản phẩm trong giỏ hàng
@@ -139,25 +110,18 @@ export default function Buy() {
         check: false,
       }
       console.log('Sẵn sàng dispatch')
-      toast.success(
-        'Thêm vào giỏ hàng thành công',
-        {
-          autoClose: 1000,
-        },
-      )
-      console.log(
-        'dispatch',
-        productFinal,
-      )
+      toast.success('Thêm vào giỏ hàng thành công', {
+        autoClose: 1000,
+      })
+      console.log('dispatch', productFinal)
       dispatch(addProduct(productFinal))
     }
   }
 
-  const handlePositionButton =
-    useCallback((posTop, posBottom) => {
-      setBtnTop(posTop)
-      setBtnBottom(posBottom)
-    }, [])
+  const handlePositionButton = useCallback((posTop, posBottom) => {
+    setBtnTop(posTop)
+    setBtnBottom(posBottom)
+  }, [])
 
   // Thực hiện cuộn lên đầu trang khi component được render
   useEffect(() => {
@@ -176,22 +140,10 @@ export default function Buy() {
         </div>
       )}
       {!isLoading && sanPham && (
-        <div
-          className={style.buy}
-          id='succes'
-        >
-          <div
-            className={style.wrapperBuy}
-          >
-            <div
-              className={
-                style.pathTitle
-              }
-            >
-              <Link
-                to='/'
-                className={style.back}
-              >
+        <div className={style.buy} id='succes'>
+          <div className={style.wrapperBuy}>
+            <div className={style.pathTitle}>
+              <Link to='/' className={style.back}>
                 Trang chủ
               </Link>
 
@@ -199,23 +151,12 @@ export default function Buy() {
                 className={style.icon}
                 fontSize='12px'
               ></ArrowForwardIosIcon>
-              <span
-                className={
-                  style.nameSanPham
-                }
-                title={sanPham?.name}
-              >
+              <span className={style.nameSanPham} title={sanPham?.name}>
                 {sanPham?.name}
               </span>
             </div>
-            <div
-              className={style.products}
-            >
-              <div
-                className={
-                  style.productsImg
-                }
-              >
+            <div className={style.products}>
+              <div className={style.productsImg}>
                 <img
                   src={require(`../DanhSachSanPham/${sanPham.hinhAnh.slice(
                     1,
@@ -223,217 +164,85 @@ export default function Buy() {
                   alt=''
                 />
               </div>
-              <div
-                className={
-                  style.border_top
-                }
-              ></div>
-              <div
-                className={
-                  style.productsInfo
-                }
-              >
-                <div
-                  className={
-                    style.officalNameVoteBought
-                  }
-                >
-                  <div
-                    className={
-                      style.name
-                    }
-                  >
-                    <span
-                      className={
-                        style.nameStyle
-                      }
-                      title={
-                        sanPham?.name
-                      }
-                    >
+              <div className={style.border_top}></div>
+              <div className={style.productsInfo}>
+                <div className={style.officalNameVoteBought}>
+                  <div className={style.name}>
+                    <span className={style.nameStyle} title={sanPham?.name}>
                       {sanPham?.name}
-                      {
-                        sanPham
-                          .isVote[0]
-                          .vote
-                      }
+                      {sanPham.isVote[0].vote}
                     </span>
                   </div>
-                  <div
-                    className={
-                      style.vote
-                    }
-                  >
-                    {sanPham.isVote[0]
-                      .checkVote ===
-                    true ? (
+                 <div className='flex gap-[.6rem]'>
+                 {sanPham.isVote[0].checkVote === true ? (
+                  <div className={style.vote}>
                       <Rating
-                        className={
-                          style.rank
-                        }
+                        className={style.rank}
                         size='small'
                         name='half-rating-read'
-                        defaultValue={Number(
-                          sanPham
-                            .isVote[1]
-                            .vote,
-                        )}
+                        defaultValue={Number(sanPham.isVote[1].vote)}
                         precision={0.5}
                         readOnly
                       />
+                      </div>
                     ) : (
                       ''
                     )}
-                    <p>
-                      {
-                        sanPham
-                          .isVote[0]
-                          .checkVote
-                      }
-                    </p>
-                    <span
-                      style={{
-                        width: 1,
-                        height: 12,
-                        margin: '0 8px',
-                        backgroundColor:
-                          'rgb(199, 199, 199)',
-                      }}
-                    ></span>
-                    <span
-                      className={
-                        style.bought
-                      }
-                    >
-                      {sanPham.isBought >
-                      0
-                        ? `Đã bán ${sanPham.isBought}`
-                        : ''}
+                   
+                    <span style={{border:!sanPham.isVote[0].checkVote ? '0px' : '' }} className={style.bought}>
+                      {sanPham.isBought > 0 ? `Đã bán ${sanPham.isBought}` : ''}
                     </span>
-                  </div>
+                 </div>
                 </div>
-                <div
-                  className={
-                    style.products_down
-                  }
-                >
-                  <div
-                    className={
-                      style.products_down_wrapper
-                    }
-                  >
+                <div className={style.products_down}>
+                  <div className={style.products_down_wrapper}>
                     {/**Giá */}
-                    <div
-                      className={
-                        style.pricePromoteGiveAstra
-                      }
-                    >
-                      <div
-                        className={
-                          style.wrapperPriceAstra
-                        }
-                      >
-                        <div
-                          className={
-                            style.wrapperPrice
-                          }
-                        >
-                          <span
-                            className={
-                              style.price
-                            }
-                          >
-                            {
-                              sanPham?.isPrice
-                            }
+                    <div className={style.pricePromoteGiveAstra}>
+                      <div className={style.wrapperPriceAstra}>
+                        <div className={style.wrapperPrice}>
+                          <span className={style.price}>
+                            {sanPham?.isPrice}
                           </span>
+                          <span className={style.vnd}>đ</span>
                           <span
-                            className={
-                              style.vnd
-                            }
-                          >
-                            đ
-                          </span>
-                          <span
-                            className={
-                              style.priceReal
-                            }
+                            className={style.priceReal}
                             style={{
-                              color:
-                                'red',
-                              textDecorationColor:
-                                'red',
-                              fontWeight:
-                                '700',
-                              fontSize:
-                                '16',
+                              color: 'red',
+                              textDecorationColor: 'red',
+                              fontWeight: '700',
+                              fontSize: '16',
                             }}
                           >
-                            {sanPham
-                              ?.isPromote[0]
-                              ?.checkPromote ===
-                            true
-                              ? sanPham
-                                  ?.isPromote[1]
-                                  ?.promote
+                            {sanPham?.isPromote[0]?.checkPromote === true
+                              ? sanPham?.isPromote[1]?.promote
                               : ''}
                           </span>
                           <span>
-                            {sanPham
-                              .isPromote[0]
-                              .checkPromote ===
-                            false
+                            {sanPham.isPromote[0].checkPromote === false
                               ? ''
                               : sanPham.isPrice -
-                                (sanPham.isPrice /
-                                  100) *
+                                (sanPham.isPrice / 100) *
                                   Math.round(
                                     Number(
-                                      Number(
-                                        sanPham
-                                          .isPromote[1]
-                                          .promote,
-                                      ) *
-                                        -1,
+                                      Number(sanPham.isPromote[1].promote) * -1,
                                     ),
                                   ) +
                                 ' đ'}
                           </span>
                         </div>
-                        <div
-                          className={
-                            style.astra
-                          }
-                        >
+                        <div className={style.astra}>
                           <img
                             src={require(`../DanhSachSanPham/img/desciption/iconAstra.png`)}
                             alt=''
                             width={13}
                             height={16}
-                            className={
-                              style.astraHinhAnh
-                            }
+                            className={style.astraHinhAnh}
                           />
-                          <span>
-                            Thưởng
-                          </span>
-                          <span>
-                            {
-                              sanPham.give
-                            }{' '}
-                            ASA{' '}
-                          </span>
-                          <span>
-                            (≈{' '}
-                            {
-                              sanPham.valueOfGive
-                            }
-                            )
-                          </span>
+                          <span>Thưởng</span>
+                          <span>{sanPham.give} ASA </span>
+                          <span>(≈ {sanPham.valueOfGive})</span>
                           <img
-                            className={
-                              style.iconNew
-                            }
+                            className={style.iconNew}
                             src={require(`../DanhSachSanPham/img/desciption/new.gif`)}
                             alt=''
                             width={42}
@@ -442,20 +251,11 @@ export default function Buy() {
                         </div>
                       </div>
                     </div>
-                    <div
-                      className={
-                        style.border_down
-                      }
-                    ></div>
-                    <div
-                      className={
-                        style.location_wrapper
-                      }
-                    >
+                    <div className={style.border_down}></div>
+                    <div className={style.location_wrapper}>
                       <span
                         style={{
-                          marginRight:
-                            '3px',
+                          marginRight: '3px',
                         }}
                       >
                         Giao đến
@@ -463,58 +263,31 @@ export default function Buy() {
                       <Location />{' '}
                       <span
                         style={{
-                          fontSize:
-                            '13px',
-                          marginLeft:
-                            '3px',
+                          fontSize: '13px',
+                          marginLeft: '3px',
                         }}
                       >
                         -
                       </span>
                       {'  '}
-                      <div
-                        className={
-                          style.location_a
-                        }
-                      >
+                      <div className={style.location_a}>
                         <Link
-                          to={
-                            '/changeAddress'
-                          }
+                          to={'/changeAddress'}
                           style={{
-                            color:
-                              'rgb(11, 116, 229)',
-                            textDecoration:
-                              'none',
-                            fontWeight:
-                              '600',
+                            color: 'rgb(11, 116, 229)',
+                            textDecoration: 'none',
+                            fontWeight: '600',
                           }}
                         >
                           Đổi địa chỉ
                         </Link>
                       </div>
                     </div>
-                    <div
-                      className={
-                        style.wrapperShipper
-                      }
-                    >
-                      <Shipper
-                        getMethodShip={
-                          handleMethodShip
-                        }
-                      />
+                    <div className={style.wrapperShipper}>
+                      <Shipper getMethodShip={handleMethodShip} />
                     </div>
-                    <div
-                      className={
-                        style.border_down
-                      }
-                    ></div>
-                    <div
-                      className={
-                        style.moneyFreeShip
-                      }
-                    >
+                    <div className={style.border_down}></div>
+                    <div className={style.moneyFreeShip}>
                       <img
                         src={require('../DanhSachSanPham/img/desciption/iconLoa.png')}
                         width={18}
@@ -522,32 +295,18 @@ export default function Buy() {
                         alt=''
                       />
                       <p>
-                        Bạn sẽ được
-                        Freeship 15.000{' '}
-                        <span>đ</span>
+                        Bạn sẽ được Freeship 15.000 <span>đ</span>
                       </p>
                       <p>
-                        cho đơn hàng từ
-                        149000{' '}
-                        <span>đ</span>
+                        cho đơn hàng từ 149000 <span>đ</span>
                       </p>
                     </div>
-                    <div
-                      className={
-                        style.border_down
-                      }
-                    ></div>
-                    <ButtonQualityProducts
-                      getQuantity={
-                        handleQuantity
-                      }
-                    />
+                    <div className={style.border_down}></div>
+                    <ButtonQualityProducts getQuantity={handleQuantity} />
                     <div className='mt-6 mb-6'>
                       <button className='w-full mb-[60px] h-full'>
                         <a
-                          onClick={
-                            handleAddProduct
-                          }
+                          onClick={handleAddProduct}
                           className='flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700'
                         >
                           Mua
@@ -557,30 +316,17 @@ export default function Buy() {
                   </div>
 
                   {/**Right */}
-                  <div
-                    className={
-                      style.distributor
-                    }
-                  >
-                    <div
-                      className={
-                        style.distributorInfo
-                      }
-                    >
+                  <div className={style.distributor}>
+                    <div className={style.distributorInfo}>
                       <img
                         src={require('./logoTiki.webp')}
                         className='w-12 h-12'
                         style={{
-                          borderRadius:
-                            '50%',
+                          borderRadius: '50%',
                         }}
                         alt=''
                       />
-                      <div
-                        className={
-                          style.distributorText
-                        }
-                      >
+                      <div className={style.distributorText}>
                         <h1 className='text-slate-950	font-medium'>
                           Tiki Trading
                         </h1>
@@ -591,32 +337,17 @@ export default function Buy() {
                         />
                       </div>
                     </div>
-                    <div
-                      className={
-                        style.distributorInfoNumber
-                      }
-                    >
-                      <div
-                        className={
-                          style.distributorStartFollow
-                        }
-                      >
-                        <div
-                          className={
-                            style.distributorStartText
-                          }
-                        >
+                    <div className={style.distributorInfoNumber}>
+                      <div className={style.distributorStartFollow}>
+                        <div className={style.distributorStartText}>
                           <div>
                             <span className='text-slate-950	font-medium'>
                               4.7 /{' '}
                             </span>
                             <FontAwesomeIcon
-                              icon={
-                                faStar
-                              }
+                              icon={faStar}
                               style={{
-                                color:
-                                  '#fdd863',
+                                color: '#fdd863',
                               }}
                             />
                           </div>
@@ -626,9 +357,7 @@ export default function Buy() {
                         </div>
                         <div className='flex px-8 justify-between text-xs text-slate-400'>
                           <span>{`5.4tr+`}</span>
-                          <span>
-                            Theo dõi
-                          </span>
+                          <span>Theo dõi</span>
                         </div>
                       </div>
                     </div>
@@ -667,12 +396,8 @@ export default function Buy() {
                           alt=''
                         />
                         <p className='flex-1 text-sm  justify-center  break-words'>
-                          Hoàn toàn{' '}
-                          <span className='text-slate-950'>
-                            111%
-                          </span>{' '}
-                          nếu là hàng
-                          giả
+                          Hoàn toàn <span className='text-slate-950'>111%</span>{' '}
+                          nếu là hàng giả
                         </p>
                       </div>
                       <div className='flex flex-col gap-1 items-center justify-center'>
@@ -682,8 +407,7 @@ export default function Buy() {
                           alt=''
                         />
                         <p className='flex-1 text-sm  justify-center  break-words'>
-                          Mở hộp kiểm
-                          tra nhận hàng
+                          Mở hộp kiểm tra nhận hàng
                         </p>
                       </div>
                       <div className='flex flex-col gap-1 items-center justify-center'>
@@ -694,10 +418,8 @@ export default function Buy() {
                         />
                         <p className='flex-1 text-sm justify-center   break-words'>
                           Đổi trả trong{' '}
-                          <span className='text-slate-950'>
-                            30 ngày
-                          </span>{' '}
-                          nếu sp lỗi
+                          <span className='text-slate-950'>30 ngày</span> nếu sp
+                          lỗi
                         </p>
                       </div>
                     </div>
@@ -709,22 +431,11 @@ export default function Buy() {
         </div>
       )}
 
-      <MoTaSanPham
-        isLoading={isLoading}
-        name={data?.data[0].name}
-      />
+      <MoTaSanPham isLoading={isLoading} name={data?.data[0].name} />
 
-      <div
-        className={
-          style.hideModuleDesktop
-        }
-      >
+      <div className={style.hideModuleDesktop}>
         <GoiYHomNay hide={hide} />
-        <DanhSachSanPham
-          handlePositionButton={
-            handlePositionButton
-          }
-        />
+        <DanhSachSanPham handlePositionButton={handlePositionButton} />
       </div>
 
       <ToastContainer />

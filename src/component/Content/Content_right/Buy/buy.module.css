@@ -93,7 +93,8 @@
 
   .products_down_wrapper {
     flex: 1;
-    height: 280px;
+    height: max-content;
+    /* height: 280px; */
   }
 
   .location_wrapper {
@@ -454,7 +455,8 @@
 
   .products_down_wrapper {
     flex: 1;
-    height: 280px;
+    height: max-content;
+    /* height: 280px; */
     /* display: none; */
   }
 

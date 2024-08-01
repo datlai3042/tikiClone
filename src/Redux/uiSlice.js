@@ -11,6 +11,7 @@ const uiSlice = createSlice({
   reducers: {
     toDoShowSideBar: (state, action) => {
       state.showSideBar = true
+      console.log('OK')
     },
     toDoHideSideBar: (state, action) => {
       state.showSideBar = false

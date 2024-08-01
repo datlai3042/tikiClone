@@ -7,7 +7,7 @@ import storage from 'redux-persist/lib/storage'
 import uiSlice from './Redux/uiSlice'
 
 const persistConfig = {
-  key: 'anhYeuEm',
+  key: 'test',
   storage,
   blacklist: ['uiSlice']
 }

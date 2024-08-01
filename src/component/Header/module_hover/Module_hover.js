@@ -34,7 +34,7 @@ function ModuleHover(props) {
   }
 
   return (
-    <ul id='module_hover'>
+    <ul id='module_hover' className='1'>
       <li className='module_hover_item' onClick={handleGoToInfo}>
         {user ? `Account: ${user}` : 'Thông tin tài khoản'}
       </li>

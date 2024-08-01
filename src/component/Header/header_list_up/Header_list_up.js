@@ -2,7 +2,7 @@ import './header_list_up.css'
 import ModuleHover from '../module_hover/Module_hover'
 import { useState, useEffect, useRef } from 'react'
 import InputSearch from './InputSearch'
-import { connect } from 'react-redux'
+import { connect, useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { getData } from '../../../apis/getDataMain'
@@ -10,6 +10,7 @@ import { SLATE_TIME } from '../../../apis/staleTime'
 import { debounce } from 'lodash'
 import { doOpenBoxLogin } from '../../../Redux/authSlice'
 import { store } from '../../../store'
+import { toDoShowSideBar } from '../../../Redux/uiSlice'
 
 function Header_list_up(props) {
   const { user, doOpenBoxLogin, quantityProduct } = props
@@ -19,12 +20,16 @@ function Header_list_up(props) {
   const [ketQua, setKetQua] = useState([])
   let navigate = useNavigate()
   const inputRef = useRef()
+  const dispatch = useDispatch()
   const [showSearch, setShowSearch] = useState(false)
   const { data, isLoading } = useQuery({
     queryKey: ['search'],
     queryFn: () => getData('/danhSachSanPham'),
     staleTime: SLATE_TIME,
   })
+
+const showSideBar = useSelector((state) => state.uiSlice.showSideBar)
+
 
   useEffect(() => {
     if (!isLoading) {
@@ -68,18 +73,18 @@ function Header_list_up(props) {
   }
 
   const goToCart = () => {
-    if (!user) {
-      doOpenBoxLogin()
-    } else {
+    // if (!user) {
+      // doOpenBoxLogin()
+    // } else {
       console.log(user)
       console.log('success')
       navigate('/Cart')
-    }
+    // }
   }
 
   const mobileShowContentLeft = (e) => {
     setShowHideContentLeft(!showHideContentLeft)
-    console.log('clickdi')
+    dispatch(toDoShowSideBar(true))
   }
 
   const handleEvent = (e, ele) => {
@@ -96,6 +101,9 @@ function Header_list_up(props) {
 
     return () => window.removeEventListener('click', (e) => handleEvent)
   }, [])
+
+
+  useEffect(() => {console.log({showSideBar})}, [showSideBar])
 
   return (
     <div
